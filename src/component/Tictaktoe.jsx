@@ -90,7 +90,7 @@ const won =(winner)=>{
   titleRef.current.innerHTML='Tic Tac Toe In <span>React</span>'
   box_array.map((e)=>{
     e.current.innerHTML=" ";
-
+    return null;
   }) 
 }
   return (
@@ -113,7 +113,7 @@ const won =(winner)=>{
           <div className="boxes"ref={box9} onClick={(e)=>{toggle(e,8)}}></div>
         </div>
         </div>
-        <button className="reset" onClick={()=>{reset()}}>Start New Game </button>   
+        <button className="reset" onClick={reset}>Start New Game </button>   
  </div>
   )
 }
