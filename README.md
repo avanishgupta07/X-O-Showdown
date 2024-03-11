@@ -6,6 +6,8 @@ TIC TAC TOE IN REACT
 
 •	A single Page REACT application implementing the classic two player TIC TAC TOE game.
 
+<img width="661" alt="image" src="https://github.com/avanishgupta07/Tic-Tac-Toe-in-React/assets/125639786/b8937b86-7aa5-4dbe-90c9-089b8dc7ee0c">
+
 •	This React based Tic Tac Toe game project showcase the ability to apply foundation concept of React.
 
 •	Implemented React concepts such as state manipulation using the state hook, ensuring dynamic Updates.
@@ -14,7 +16,11 @@ TIC TAC TOE IN REACT
 
 
 
-<img width="661" alt="image" src="https://github.com/avanishgupta07/Tic-Tac-Toe-in-React/assets/125639786/b8937b86-7aa5-4dbe-90c9-089b8dc7ee0c">
+
+
+
+
+
 
 
 
@@ -39,5 +45,5 @@ TIC TAC TOE IN REACT
 
 
 
-LIVE LINK IS HERE https://tictactoegamefun123.netlify.app/
+LIVE LINK IS HERE  https://tictactoegamefun123.netlify.app/
 
