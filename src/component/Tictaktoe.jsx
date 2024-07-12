@@ -1,120 +1,174 @@
-import React, { useState , useRef} from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import './tictaktoe.css'
 import circle_icon from '../assests/circle.png'
 import cross_icon from '../assests/cross.png'
 
-let data=["","","","","","","","",""]
-const Tictaktoe=()=>{
-  let [count,setCount]=useState(0);
-  let [lock,setLock]=useState(false);
-  let titleRef=useRef(null);
-  let box1=useRef(null);
-  let box2=useRef(null);
-  let box3=useRef(null);
-  let box4=useRef(null);
-  let box5=useRef(null);
-  let box6=useRef(null);
-  let box7=useRef(null);
-  let box8=useRef(null);
-  let box9=useRef(null);
+const Tictaktoe = () => {
+  const [count, setCount] = useState(0);
+  const [lock, setLock] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+  const [player1, setPlayer1] = useState({ name: '', score: 0, symbol: 'X' });
+  const [player2, setPlayer2] = useState({ name: '', score: 0, symbol: 'O' });
+  const [currentPlayer, setCurrentPlayer] = useState(null);
+  const [gameStarted, setGameStarted] = useState(false);
+  const [data, setData] = useState(Array(9).fill(""));
+  const [moves, setMoves] = useState([]);
 
-  let box_array=[box1,box2,box3,box4,box5,box6,box7,box8,box9];
-  const toggle=(e,num)=>{
-    if(lock){
-      return 0;
+  const titleRef = useRef(null);
+  const boxRefs = useRef(Array(9).fill(null).map(() => React.createRef()));
+
+  useEffect(() => {
+    document.body.className = darkMode ? 'dark-mode' : 'light-mode';
+  }, [darkMode]);
+
+  const startGame = () => {
+    if (player1.name && player2.name) {
+      setGameStarted(true);
+      setCurrentPlayer(player1);
+    } else {
+      alert("Please enter names for both players!");
     }
-    if(count%2===0){
-  e.target.innerHTML=`<img src ='${cross_icon}'>`;
-  data[num]="x";
-  setCount(++count);
+  };
 
+  const toggle = (num) => {
+    if (lock || !gameStarted || data[num] !== "") {
+      return;
+    }
+    const newData = [...data];
+    const newMoves = [...moves];
+    if (count % 2 === 0) {
+      boxRefs.current[num].current.innerHTML = `<img src='${cross_icon}' alt='X'>`;
+      newData[num] = "X";
+      newMoves.push(`${player1.name} placed X at position ${num + 1}`);
+      setCurrentPlayer(player2);
+    } else {
+      boxRefs.current[num].current.innerHTML = `<img src='${circle_icon}' alt='O'>`;
+      newData[num] = "O";
+      newMoves.push(`${player2.name} placed O at position ${num + 1}`);
+      setCurrentPlayer(player1);
+    }
+    setData(newData);
+    setMoves(newMoves);
+    setCount(count + 1);
+    checkWin(newData);
+  };
+
+  const checkWin = (currentData) => {
+    const winPatterns = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+      [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+      [0, 4, 8], [2, 4, 6] // Diagonals
+    ];
+
+    for (let pattern of winPatterns) {
+      const [a, b, c] = pattern;
+      if (currentData[a] && currentData[a] === currentData[b] && currentData[a] === currentData[c]) {
+        won(currentData[a]);
+        return;
+      }
+    }
+
+    if (count === 8) {
+      titleRef.current.innerHTML = "It's a draw!";
+      setLock(true);
+    }
+  };
+
+  const won = (winner) => {
+    setLock(true);
+    if (winner === "X") {
+      titleRef.current.innerHTML = `Congratulations ${player1.name}!`;
+      setPlayer1(prev => ({ ...prev, score: prev.score + 1 }));
+    } else {
+      titleRef.current.innerHTML = `Congratulations ${player2.name}!`;
+      setPlayer2(prev => ({ ...prev, score: prev.score + 1 }));
+    }
+  };
+
+  const reset = () => {
+    setLock(false);
+    setData(Array(9).fill(""));
+    setMoves([]);
+    titleRef.current.innerHTML = 'Tic Tac Toe In <span>React</span>';
+    boxRefs.current.forEach(box => {
+      box.current.innerHTML = "";
+    });
+    setCount(0);
+    setCurrentPlayer(player1);
+  };
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
+
+  if (!gameStarted) {
+    return (
+      <div className={`container ${darkMode ? 'dark-mode' : 'light-mode'}`}>
+        <h1 className="title">Tic Tac Toe</h1>
+        <div className="player-inputs">
+          <input 
+            type="text" 
+            placeholder="Player 1 Name (X)" 
+            value={player1.name} 
+            onChange={(e) => setPlayer1({...player1, name: e.target.value})}
+          />
+          <input 
+            type="text" 
+            placeholder="Player 2 Name (O)" 
+            value={player2.name} 
+            onChange={(e) => setPlayer2({...player2, name: e.target.value})}
+          />
+        </div>
+        <button className="start-button" onClick={startGame}>Start Game</button>
+        <button className="mode-toggle" onClick={toggleDarkMode}>
+          {darkMode ? 'Light Mode' : 'Dark Mode'}
+        </button>
+      </div>
+    );
   }
-    else  {
-      e.target.innerHTML=`<img src='${circle_icon}'>`;
-    data[num]="o";
-    setCount(++count);
-    
-  }
-  checkWin();
-}
-const checkWin =()=>{
-  if(data[0]===data[1]&& data[1]===data[2]&&data[2]!=="")
-  {
-   won(data[2]); 
-  }
-  else if(data[3]===data[4]&& data[4]===data[5]&&data[5]!=="")
-  {
-   won(data[5]); 
-  }
-  else if(data[6]===data[7]&& data[7]===data[8]&&data[8]!=="")
-  {
-   won(data[8]); 
-  }
-  else if(data[0]===data[3]&& data[3]===data[6]&&data[6]!=="")
-  {
-   won(data[6]); 
-  }
-  else if(data[1]===data[4]&& data[4]===data[7]&&data[7]!=="")
-  {
-   won(data[7]); 
-  }
-  else if(data[2]===data[5]&& data[5]===data[8]&&data[8]!=="")
-  {
-   won(data[8]); 
-  }
-  else if(data[0]===data[4]&& data[4]===data[8]&&data[8]!=="")
-  {
-   won(data[8]); 
-  }
-  else if(data[0]===data[1]&& data[1]===data[2]&&data[2]!=="")
-  {
-   won(data[2]); 
-  }
-  else if(data[2]===data[4]&& data[4]===data[6]&&data[6]!=="")
-  {
-   won(data[6]); 
-  }
-}
-const won =(winner)=>{
-  setLock(true);
-  if(winner==="x"){
-    titleRef.current.innerHTML=`Congratulation:<img src=${cross_icon}>`;
-  }
-  else{
-    titleRef.current.innerHTML=`Congratulation:<img src=${circle_icon}>`;
-  }
-}
- const reset=()=>{
-  setLock(false);
-  data=["","","","","","","","",""];
-  titleRef.current.innerHTML='Tic Tac Toe In <span>React</span>'
-  box_array.map((e)=>{
-    e.current.innerHTML=" ";
-    return null;
-  }) 
-}
+
   return (
-    <div className='container'>
-        <h1 className="title" ref={titleRef}>Tic Tac Toe In <span>React</span></h1>
+    <div className={`container ${darkMode ? 'dark-mode' : 'light-mode'}`}>
+      <h1 className="title" ref={titleRef}>Tic Tac Toe In <span>React</span></h1>
+      <div className="game-info">
+        <div className="score-board">
+          <div>{player1.name} (X): {player1.score}</div>
+          <div>{player2.name} (O): {player2.score}</div>
+        </div>
+        <div className="current-player">Next Turn: {currentPlayer?.name} ({currentPlayer?.symbol})</div>
+      </div>
+      <div className="game-container">
         <div className="board">
-        <div className="row1">
-          <div className="boxes " ref={box1} onClick={(e)=>{toggle(e,0)}}></div>
-          <div className="boxes" ref={box2} onClick={(e)=>{toggle(e,1)}}></div>
-          <div className="boxes"ref={box3} onClick={(e)=>{toggle(e,2)}}></div>
+          {[0, 1, 2].map((row) => (
+            <div className={`row${row + 1}`} key={row}>
+              {[0, 1, 2].map((col) => (
+                <div 
+                  className="boxes" 
+                  ref={boxRefs.current[row * 3 + col]} 
+                  onClick={() => toggle(row * 3 + col)}
+                  key={col}
+                ></div>
+              ))}
+            </div>
+          ))}
         </div>
-        <div className="row2">
-          <div className="boxes" ref={box4} onClick={(e)=>{toggle(e,3)}}></div>
-          <div className="boxes" ref={box5} onClick={(e)=>{toggle(e,4)}}></div>
-          <div className="boxes"ref={box6} onClick={(e)=>{toggle(e,5)}}></div>
+        <div className="move-list">
+          <h3>Move History</h3>
+          <ul>
+            {moves.map((move, index) => (
+              <li key={index}>{move}</li>
+            ))}
+          </ul>
         </div>
-        <div className="row3">
-          <div className="boxes"ref={box7} onClick={(e)=>{toggle(e,6)}}></div>
-          <div className="boxes"ref={box8} onClick={(e)=>{toggle(e,7)}}></div>
-          <div className="boxes"ref={box9} onClick={(e)=>{toggle(e,8)}}></div>
-        </div>
-        </div>
-        <button className="reset" onClick={reset}>Start New Game </button>   
- </div>
-  )
+      </div>
+      <div className="buttons">
+        <button className="reset" onClick={reset}>New Game</button>
+        <button className="mode-toggle" onClick={toggleDarkMode}>
+          {darkMode ? 'Light Mode' : 'Dark Mode'}
+        </button>
+      </div>
+    </div>
+  );
 }
-export default Tictaktoe
+
+export default Tictaktoe;
