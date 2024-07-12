@@ -18,11 +18,6 @@
 
   <h2>Getting Started</h2>
 
-  <h3>Prerequisites</h3>
-  <ul>
-    <li>Node.js and npm (Node Package Manager) installed on your machine.</li>
-  </ul>
-
   <h3>Installation</h3>
   <ol>
     <li>Clone the repository:
