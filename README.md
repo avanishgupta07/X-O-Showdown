@@ -1,12 +1,12 @@
 
 </head>
 <body>
-  <h1>Tic Tac Toe Game in React</h1>
+  <h1>X&O Showdown in React</h1>
 
   <p>Welcome to the Tic Tac Toe game built using React! This project implements the classic Tic Tac Toe game where two players take turns marking spaces in a 3x3 grid with their respective symbols ('X' and 'O'). The game also includes features like player input for names, score tracking, move history, and a dark/light mode toggle.</p>
 
   <h2>Live Demo</h2>
-  <p>You can play the game live here: <a href="https://tictactoegamefun123.netlify.app/" target="_blank" rel="noopener noreferrer">Tic Tac Toe Game</a></p>
+  <p>You can play the game live here: <a href="https://tictactoegamefun123.netlify.app/" target="_blank" rel="noopener noreferrer">X&O Showdown</a></p>
 
   <h2>Features</h2>
   <ul>
