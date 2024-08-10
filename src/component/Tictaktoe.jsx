@@ -89,7 +89,7 @@ const Tictaktoe = () => {
     setLock(false);
     setData(Array(9).fill(""));
     setMoves([]);
-    titleRef.current.innerHTML = 'Tic Tac Toe In <span>React</span>';
+    titleRef.current.innerHTML = 'X&O Showdown<span>React</span>';
     boxRefs.current.forEach(box => {
       box.current.innerHTML = "";
     });
@@ -104,7 +104,7 @@ const Tictaktoe = () => {
   if (!gameStarted) {
     return (
       <div className={`container ${darkMode ? 'dark-mode' : 'light-mode'}`}>
-        <h1 className="title">Tic Tac Toe</h1>
+        <h1 className="title">X&O Showdown</h1>
         <div className="player-inputs">
           <input 
             type="text" 
@@ -129,7 +129,7 @@ const Tictaktoe = () => {
 
   return (
     <div className={`container ${darkMode ? 'dark-mode' : 'light-mode'}`}>
-      <h1 className="title" ref={titleRef}>Tic Tac Toe In <span>React</span></h1>
+      <h1 className="title" ref={titleRef}>X&O Showdown <span>React</span></h1>
       <div className="game-info">
         <div className="score-board">
           <div>{player1.name} (X): {player1.score}</div>
